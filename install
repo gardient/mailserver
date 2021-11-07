@@ -1,31 +1,89 @@
 #!/usr/bin/env bash
 
-executed() {
+_ensure_defaults() {
+    if [[ -z "$MAILSRV_INSTALL_GIT_REMOTE" ]]; then
+        export MAILSRV_INSTALL_GIT_REMOTE="https://github.com/gardient/mailserver.git"
+    fi
 
+    if [[ -z "$MAILSRV_INSTALL_DIR" ]]; then
+        if [[ "$EUID" = "0" ]]; then
+            export MAILSRV_INSTALL_DIR="/root/mailserver"
+        else
+            export MAILSRV_INSTALL_DIR="$HOME/mailserver"
+        fi
+    fi
+
+    export INSTALLER_REPO="$MAILSRV_INSTALL_DIR/tmp"
+    export INSTALLER_TMP="$MAILSRV_INSTALL_DIR/tmp"
+    export INSTALLER_DATA="$MAILSRV_INSTALL_DIR/installdata"
 }
 
-piped() {
-    if [[ -n "$MAILSRV_INSTALL_USE_BRANCH" ]]; then
-        echo ">> git clone --dept 1 -b '$MAILSRV_INSTALL_USE_BRANCH' '$MAILSRV_INSTALL_GIT_REMOTE'"
-    elif [[ -n "$MAILSRV_INSTALL_USE_TAG" ]]; then
-        echo ">> git clone --dept 1 -b '$MAILSRV_INSTALL_USE_TAG' '$MAILSRV_INSTALL_GIT_REMOTE'"
-    else
-        echo "getting the newest release"
+__ensure_directory_exists() {
+    if [[ ! -d "$1"]]; then
+        mkdir "$1"
     fi
 }
 
-if [[ ! "$EUID" = "0" || -n "$DEBUG" ]]; then
-    echo '>> this needs root <<' >2
-    exit 1
+_ensure_installer_directories() {
+    __ensure_directory_exists $MAILSRV_INSTALL_DIR
+    rm -rfv $INSTALLER_REPO > $output
+    __ensure_directory_exists $INSTALLER_REPO
+    rm -rfv $INSTALLER_TMP > $output
+    __ensure_directory_exists $INSTALLER_TMP
+    __ensure_directory_exists $INSTALLER_DATA
+}
+
+_ensure_installer_dependencies() {
+    apt-get install -y git jq curl wget pwgen
+}
+
+executed() {
+    cd "$INSTALLER_REPO"
+    if [[ ! "$EUID" = "0" || -n "$DEBUG" ]]; then
+        echo -e "\e[0;33m>> you need to execute this script as root <<\n\ttry: sudo ${BASH_SOURCE[0]}\e[0m\n"
+
+        exit 1
+    else
+        _ensure_installer_dependencies
+    fi
+}
+
+piped() {
+    cd "$INSTALLER_REPO"
+    _piped_getdata
+    if [[ ! "$EUID" = "0" ]]; then
+        # if not root only get the repository
+        echo -e "\e[0;33m>> installer downloaded <<\nyou will need root to execute it\n\trun: sudo \"$INSTALLER_REPO/install\"\e[0m\n"
+        exit 0
+    else
+        _ensure_installer_dependencies
+    fi
+}
+
+_piped_getdata() {
+    if [[ -n "$MAILSRV_INSTALL_USE_BRANCH" ]]; then
+        echo ">> git clone --dept 1 -b \"$MAILSRV_INSTALL_USE_BRANCH\" \"$MAILSRV_INSTALL_GIT_REMOTE\" \"$INSTALLER_REPO\""
+        git clone --dept 1 -b "$MAILSRV_INSTALL_USE_BRANCH" "$MAILSRV_INSTALL_GIT_REMOTE" "$INSTALLER_REPO"
+    elif [[ -n "$MAILSRV_INSTALL_USE_TAG" ]]; then
+        echo ">> git clone --dept 1 -b \"$MAILSRV_INSTALL_USE_TAG\" \"$MAILSRV_INSTALL_GIT_REMOTE\" \"$INSTALLER_REPO\""
+        git clone --dept 1 -b "$MAILSRV_INSTALL_USE_TAG" "$MAILSRV_INSTALL_GIT_REMOTE" "$INSTALLER_REPO"
+    else
+        echo "getting the newest release"
+        #curl -s https://api.github.com
+    fi
+}
+
+export output=/dev/null
+if [[ -n "$DEBUG" ]]; then
+    export output=/dev/stdout
 fi
 
 if [[ -z "$DEBUG" ]]; then
     apt-get install -y git jq curl wget pwgen
 fi
 
-if [[ -z "$MAILSRV_INSTALL_GIT_REMOTE" ]]; then
-    export MAILSRV_INSTALL_GIT_REMOTE='https://github.com/gardient/mailserver.git'
-fi
+_ensure_defaults
+_ensure_installer_directories
 
 if [[ -n "${BASH_SOURCE[0]}" ]]; then
 	if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
