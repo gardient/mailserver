@@ -13,7 +13,7 @@ _ensure_defaults() {
         fi
     fi
 
-    export INSTALLER_REPO="$MAILSRV_INSTALL_DIR/tmp"
+    export INSTALLER_REPO="$MAILSRV_INSTALL_DIR/repo"
     export INSTALLER_TMP="$MAILSRV_INSTALL_DIR/tmp"
     export INSTALLER_DATA="$MAILSRV_INSTALL_DIR/installdata"
 }
