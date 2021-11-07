@@ -41,7 +41,6 @@ executed() {
     cd "$INSTALLER_REPO"
     if [[ ! "$EUID" = "0" || -n "$DEBUG" ]]; then
         echo -e "\e[0;33m>> you need to execute this script as root <<\n\ttry: sudo ${BASH_SOURCE[0]}\e[0m\n"
-
         exit 1
     else
         _ensure_installer_dependencies
@@ -49,7 +48,6 @@ executed() {
 }
 
 piped() {
-    cd "$INSTALLER_REPO"
     _piped_getdata
     if [[ ! "$EUID" = "0" ]]; then
         # if not root only get the repository
@@ -57,6 +55,8 @@ piped() {
         exit 0
     else
         _ensure_installer_dependencies
+        cd "$INSTALLER_REPO"
+        ./install
     fi
 }
 
@@ -71,6 +71,11 @@ _piped_getdata() {
         echo "getting the newest release"
         #curl -s https://api.github.com
     fi
+
+    # ensure everything that should be executable is executable
+    pushd "$INSTALLER_REPO" > $output
+    fgrep -lir '#!/usr/bin/env bash' . | xargs chmod u+x
+    popd > $output
 }
 
 export output=/dev/null
