@@ -69,7 +69,13 @@ _piped_getdata() {
         git clone --dept 1 -b "$MAILSRV_INSTALL_USE_TAG" "$MAILSRV_INSTALL_GIT_REMOTE" "$INSTALLER_REPO"
     else
         echo "getting the newest release"
-        #curl -s https://api.github.com
+        latest_tag=$(curl -sSL https://api.github.com/repos/gardient/mailserver/releases | jq '.[0].tag_name')
+        if [[ ! "$latest_tag" = "null" ]]; then
+            git clone --dept 1 -b "$latest_tag" "$MAILSRV_INSTALL_GIT_REMOTE" "$INSTALLER_REPO"
+        else
+            # if there are no releases, clone the default branch
+            git clone --dept 1 "$MAILSRV_INSTALL_GIT_REMOTE" "$INSTALLER_REPO"
+        fi
     fi
 
     echo "making sure everything that should be executable is executable"
