@@ -72,7 +72,7 @@ _piped_getdata() {
         #curl -s https://api.github.com
     fi
 
-    # ensure everything that should be executable is executable
+    echo "making sure everything that should be executable is executable"
     pushd "$INSTALLER_REPO" > $output
     fgrep -lir '#!/usr/bin/env bash' . | xargs chmod u+x
     popd > $output
