@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+executed() {
+
+}
+
+piped() {
+    if [[ -n "$MAILSRV_INSTALL_USE_BRANCH" ]]; then
+        echo ">> git clone --dept 1 -b '$MAILSRV_INSTALL_USE_BRANCH' '$MAILSRV_INSTALL_GIT_REMOTE'"
+    elif [[ -n "$MAILSRV_INSTALL_USE_TAG" ]]; then
+        echo ">> git clone --dept 1 -b '$MAILSRV_INSTALL_USE_TAG' '$MAILSRV_INSTALL_GIT_REMOTE'"
+    else
+        echo "getting the newest release"
+    fi
+}
+
+if [[ ! "$EUID" = "0" || -n "$DEBUG" ]]; then
+    echo '>> this needs root <<' >2
+    exit 1
+fi
+
+if [[ -z "$DEBUG" ]]; then
+    apt-get install -y git jq curl wget pwgen
+fi
+
+if [[ -z "$MAILSRV_INSTALL_GIT_REMOTE" ]]; then
+    export MAILSRV_INSTALL_GIT_REMOTE='https://github.com/gardient/mailserver.git'
+fi
+
+if [[ -n "${BASH_SOURCE[0]}" ]]; then
+	if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+		executed
+	else
+		echo 'why would you source this?' >2
+        exit 2
+	fi
+else
+	piped
+fi
