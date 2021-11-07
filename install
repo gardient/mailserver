@@ -78,10 +78,6 @@ if [[ -n "$DEBUG" ]]; then
     export output=/dev/stdout
 fi
 
-if [[ -z "$DEBUG" ]]; then
-    apt-get install -y git jq curl wget pwgen
-fi
-
 _ensure_defaults
 _ensure_installer_directories
 
