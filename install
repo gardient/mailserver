@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
 
+set -a
+term_rst='\e[0m'
+term_err='\e[0;31m'
+term_suc='\e[0;32m'
+term_wrn='\e[0;33m'
+term_inf='\e[0;94m'
+set +a
+
+__print() {
+    echo -e "$1$2${term_rst}\n"
+}
+
 _ensure_defaults() {
+    set -a
     if [[ -z "$MAILSRV_INSTALL_GIT_REMOTE" ]]; then
         export MAILSRV_INSTALL_GIT_REMOTE="https://github.com/gardient/mailserver.git"
     fi
@@ -16,6 +29,7 @@ _ensure_defaults() {
     export INSTALLER_REPO="$MAILSRV_INSTALL_DIR/repo"
     export INSTALLER_TMP="$MAILSRV_INSTALL_DIR/tmp"
     export INSTALLER_DATA="$MAILSRV_INSTALL_DIR/installdata"
+    set +a
 }
 
 __ensure_directory_exists() {
@@ -34,13 +48,31 @@ _ensure_installer_directories() {
 }
 
 _ensure_installer_dependencies() {
-    apt-get install -y git jq curl wget pwgen
+    __print $term_inf ">> installing installer dependencies <<"
+    if [[ ! "$EUID" = "0"]]; then
+        if [[ -n "$DEBUG" ]]; then
+            __print $term_wrn ">> you are in debug mode, and not root... skipping <<"
+            __print "hope you know what you're doing"
+        else
+            __print $term_wrn ">> you are not root <<"
+
+            installed_count=$(apt list --installed 2>/dev/null | egrep '^(git|jq|curl|wget|pwgen)/' | wc -l)
+            if [[ installed_count -eq 5 ]]; then
+                __print $term_inf "you have all dependencies installed... continuing"
+            else
+                __print $term_err "you are missing some dependencies"
+                __print $term_wrn "\ttry: sudo apt-get install -y git jq curl wget pwgen"
+            fi
+        fi
+    else
+        apt-get install -y git jq curl wget pwgen
+    fi
 }
 
 executed() {
     cd "$INSTALLER_REPO"
     if [[ ! "$EUID" = "0" || -n "$DEBUG" ]]; then
-        echo -e "\e[0;33m>> you need to execute this script as root <<\n\ttry: sudo ${BASH_SOURCE[0]}\e[0m\n"
+        __print $term_wrn ">> you need to execute this script as root <<\n\ttry: sudo ${BASH_SOURCE[0]}"
         exit 1
     else
         _ensure_installer_dependencies
@@ -48,13 +80,13 @@ executed() {
 }
 
 piped() {
+    _ensure_installer_dependencies
     _piped_getdata
     if [[ ! "$EUID" = "0" ]]; then
         # if not root only get the repository
-        echo -e "\e[0;33m>> installer downloaded <<\nyou will need root to execute it\n\trun: sudo \"$INSTALLER_REPO/install\"\e[0m\n"
+        __print $term_wrn ">> installer downloaded <<\nyou will need root to execute it\n\trun: sudo \"$INSTALLER_REPO/install\""
         exit 0
     else
-        _ensure_installer_dependencies
         cd "$INSTALLER_REPO"
         ./install
     fi
