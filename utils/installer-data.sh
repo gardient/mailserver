@@ -29,4 +29,5 @@ _inst_data_save() {
     fi
 
     echo "$key='$val'" > "$INSTALLER_DATA/$store.dta"
+    chmod 600 "$INSTALLER_DATA/$store.dta"
 }

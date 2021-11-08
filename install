@@ -46,6 +46,7 @@ _ensure_installer_directories() {
     rm -rfv $INSTALLER_TMP > $output
     __ensure_directory_exists $INSTALLER_TMP
     __ensure_directory_exists $INSTALLER_DATA
+    chmod 700 "$INSTALLER_DATA"
 }
 
 _ensure_installer_dependencies() {
