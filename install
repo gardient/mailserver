@@ -71,8 +71,9 @@ _ensure_installer_dependencies() {
 
 executed() {
     cd "$INSTALLER_REPO"
-    if [[ ! "$EUID" = "0" || -n "$DEBUG" ]]; then
-        __print $term_wrn ">> you need to execute this script as root <<\n\ttry: sudo ${BASH_SOURCE[0]}"
+    if [[ ! "$EUID" = "0" && -z "$DEBUG" ]]; then
+        __print $term_wrn ">> you need to execute this script as root <<"
+        __print $term_wrn "\ttry: sudo ${BASH_SOURCE[0]}"
         exit 1
     else
         _ensure_installer_dependencies
