@@ -10,7 +10,7 @@ __ensure_env term_inf '\e[0;94m'
 set +a
 
 __print() {
-    echo -e "$1$2${term_rst}\n"
+    echo -e "$1$2${term_rst}"
 }
 
 print_err() {

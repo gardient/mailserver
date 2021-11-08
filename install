@@ -9,7 +9,7 @@ term_inf='\e[0;94m'
 set +a
 
 __print() {
-    echo -e "$1$2${term_rst}\n"
+    echo -e "$1$2${term_rst}"
 }
 
 _ensure_defaults() {
@@ -27,6 +27,7 @@ _ensure_defaults() {
     fi
 
     export INSTALLER_REPO="$MAILSRV_INSTALL_DIR/repo"
+    export INSTALLER_UTILS="$MAILSRV_INSTALL_DIR/repo/utils"
     export INSTALLER_TMP="$MAILSRV_INSTALL_DIR/tmp"
     export INSTALLER_DATA="$MAILSRV_INSTALL_DIR/installdata"
     set +a
@@ -76,6 +77,7 @@ executed() {
         exit 1
     else
         _ensure_installer_dependencies
+        run-parts -v -- "$INSTALLER_REPO/modules/*"
     fi
 }
 
