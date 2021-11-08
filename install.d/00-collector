@@ -2,9 +2,27 @@
 
 source "$INSTALLER_UTILS/print.sh"
 source "$INSTALLER_UTILS/read.sh"
+source "$INSTALLER_UTILS/installer-data.sh"
 
-$fqdn_guess="$HOSTNAME"
-if [[ "$(echo $HOSTNAME | tr '.' ' ' | wc -w)" -lt 2 ]]; then
-    $fqdn_guess="$fqdn_guess.local"
+_inst_data_load "hosting"
+_inst_data_load "passw"
+
+if [[ -z "$MAILSRV_FQDN" ]]; then
+    fqdn_guess="$HOSTNAME"
+    if [[ "$(tr '.' ' ' <<< "$fqdn_guess" | wc -w)" -lt 2 ]]; then
+        fqdn_guess="$fqdn_guess.local"
+    fi
+    prompt_and_read "What is the servers FQDN? (ex.: mail.example.com)" "$fqdn_guess" "MAILSRV_FQDN"
+    export MAILSRV_FQDN
+    _inst_data_save "hosting" MAILSRV_FQDN "$MAILSRV_FQDN"
 fi
-prompt_and_read "What is the servers FQDN? (ex.: mail.example.com)" "$fqdn_guess" "MAILSRVR__FQDN"
+
+if [[ -z "$MAILSRV_MAIL_DOMAIN" ]]; then
+    mail_domain_guess="$MAILSRV_FQDN"
+    if [[ "$(tr '.' ' ' <<< "$mail_domain_guess" | wc -w)" -gt 2 ]]; then
+        mail_domain_guess="$(cut -d. -f2- <<< "$mail_domain_guess")"
+    fi
+    prompt_and_read "What domain will this server serve? (ex.: example.com)" "$mail_domain_guess" "MAILSRV_MAIL_DOMAIN"
+    export MAILSRV_MAIL_DOMAIN
+    _inst_data_save "hosting" MAILSRV_MAIL_DOMAIN "$MAILSRV_MAIL_DOMAIN"
+fi
