@@ -15,21 +15,22 @@ __print() {
 _ensure_defaults() {
     set -a
     if [[ -z "$MAILSRV_INSTALL_GIT_REMOTE" ]]; then
-        export MAILSRV_INSTALL_GIT_REMOTE="https://github.com/gardient/mailserver.git"
+        MAILSRV_INSTALL_GIT_REMOTE="https://github.com/gardient/mailserver.git"
     fi
+    export MAILSRV_FQDN
 
     if [[ -z "$MAILSRV_INSTALL_DIR" ]]; then
         if [[ "$EUID" = "0" ]]; then
-            export MAILSRV_INSTALL_DIR="/root/mailserver"
+            MAILSRV_INSTALL_DIR="/root/mailserver"
         else
-            export MAILSRV_INSTALL_DIR="$HOME/mailserver"
+            MAILSRV_INSTALL_DIR="$HOME/mailserver"
         fi
     fi
 
-    export INSTALLER_REPO="$MAILSRV_INSTALL_DIR/repo"
-    export INSTALLER_UTILS="$MAILSRV_INSTALL_DIR/repo/utils"
-    export INSTALLER_TMP="$MAILSRV_INSTALL_DIR/tmp"
-    export INSTALLER_DATA="$MAILSRV_INSTALL_DIR/installdata"
+    INSTALLER_REPO="$MAILSRV_INSTALL_DIR/repo"
+    INSTALLER_UTILS="$MAILSRV_INSTALL_DIR/repo/utils"
+    INSTALLER_TMP="$MAILSRV_INSTALL_DIR/tmp"
+    INSTALLER_DATA="$MAILSRV_INSTALL_DIR/installdata"
     set +a
 }
 
