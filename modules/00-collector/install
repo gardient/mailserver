@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+source "$INSTALLER_UTILS/print.sh"
+source "$INSTALLER_UTILS/read.sh"
+
+$fqdn_guess="$HOSTNAME"
+if [[ "$(echo $HOSTNAME | tr '.' ' ' | wc -w)" -lt 2 ]]; then
+    $fqdn_guess="$fqdn_guess.local"
+fi
+prompt_and_read "What is the servers FQDN? (ex.: mail.example.com)" "$fqdn_guess" "MAILSRVR__FQDN"
