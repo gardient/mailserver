@@ -28,6 +28,6 @@ _inst_data_save() {
         mv "$INSTALLER_DATA/$store.dta.swp" "$INSTALLER_DATA/$store.dta"
     fi
 
-    echo "$key='$val'" > "$INSTALLER_DATA/$store.dta"
+    echo "$key='$val'" >> "$INSTALLER_DATA/$store.dta"
     chmod 600 "$INSTALLER_DATA/$store.dta"
 }
