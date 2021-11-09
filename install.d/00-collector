@@ -26,3 +26,28 @@ if [[ -z "$MAILSRV_MAIL_DOMAIN" ]]; then
     export MAILSRV_MAIL_DOMAIN
     _inst_data_save "hosting" MAILSRV_MAIL_DOMAIN "$MAILSRV_MAIL_DOMAIN"
 fi
+
+if [[ -z "$MAILSRV_DB_SA_PASSW" ]]; then
+    prompt_and_pasw "Database \`Superadmin\` password" "MAILSRV_DB_SA_PASSW"
+    export MAILSRV_DB_SA_PASSW
+    _inst_data_save "passw" MAILSRV_DB_SA_PASSW "$MAILSRV_DB_SA_PASSW"
+fi
+
+if [[ -z "$MAILSRV_WEBMSTR_PASSW" ]]; then
+    prompt_and_pasw "Email account password for \`webmaster@$MAILSRV_MAIL_DOMAIN\`" "MAILSRV_WEBMSTR_PASSW"
+    export MAILSRV_WEBMSTR_PASSW
+    _inst_data_save "passw" MAILSRV_WEBMSTR_PASSW "$MAILSRV_WEBMSTR_PASSW"
+fi
+
+if [[ -z "$MAILSRV_POSTFIX_ADM_SETUP_PASSW" ]]; then
+    prompt_and_pasw "PostfixAdmin setup password" "MAILSRV_POSTFIX_ADM_SETUP_PASSW"
+    export MAILSRV_POSTFIX_ADM_SETUP_PASSW
+    _inst_data_save "passw" MAILSRV_POSTFIX_ADM_SETUP_PASSW "$MAILSRV_POSTFIX_ADM_SETUP_PASSW"
+fi
+
+# always re-save everything at the end
+_inst_data_save "hosting" MAILSRV_FQDN "$MAILSRV_FQDN"
+_inst_data_save "hosting" MAILSRV_MAIL_DOMAIN "$MAILSRV_MAIL_DOMAIN"
+_inst_data_save "passw" MAILSRV_DB_SA_PASSW "$MAILSRV_DB_SA_PASSW"
+_inst_data_save "passw" MAILSRV_WEBMSTR_PASSW "$MAILSRV_WEBMSTR_PASSW"
+_inst_data_save "passw" MAILSRV_POSTFIX_ADM_SETUP_PASSW "$MAILSRV_POSTFIX_ADM_SETUP_PASSW"
