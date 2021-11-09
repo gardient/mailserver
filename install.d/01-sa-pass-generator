@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+source "$INSTALLER_UTILS/print.sh"
+source "$INSTALLER_UTILS/installer-data.sh"
+
+_inst_data_load "passw"
+
+print_inf "generating DB service account passwords"
+
+generated=0
+
+if [[ -z "$MAILSRV_SA_POSTFIX_RO_PASSW" ]]; then
+    print_inf "generating password for 'sa-postfix-ro'"
+    MAILSRV_SA_POSTFIX_RO_PASSW=$(pwgen -s 32 1)
+    export MAILSRV_SA_POSTFIX_RO_PASSW
+    _inst_data_save "passw" MAILSRV_SA_POSTFIX_RO_PASSW "$MAILSRV_SA_POSTFIX_RO_PASSW"
+    (( generated++ ))
+fi
+
+if [[ -z "$MAILSRV_SA_DOVECOT_RO_PASSW" ]]; then
+    print_inf "generating password for 'sa-dovecot-ro'"
+    MAILSRV_SA_DOVECOT_RO_PASSW=$(pwgen -s 32 1)
+    export MAILSRV_SA_DOVECOT_RO_PASSW
+    _inst_data_save "passw" MAILSRV_SA_DOVECOT_RO_PASSW "$MAILSRV_SA_DOVECOT_RO_PASSW"
+    (( generated++ ))
+fi
+
+if [[ -z "$MAILSRV_SA_ROUNDCUBE_RW_PASSW" ]]; then
+    print_inf "generating password for 'sa-roundcube-rw'"
+    MAILSRV_SA_ROUNDCUBE_RW_PASSW=$(pwgen -s 32 1)
+    export MAILSRV_SA_ROUNDCUBE_RW_PASSW
+    _inst_data_save "passw" MAILSRV_SA_ROUNDCUBE_RW_PASSW "$MAILSRV_SA_ROUNDCUBE_RW_PASSW"
+    (( generated++ ))
+fi
+
+if [[ -z "$MAILSRV_SA_RC_PASS_RW_PASSW" ]]; then
+    print_inf "generating password for 'sa-rc-pass-rw'"
+    MAILSRV_SA_RC_PASS_RW_PASSW=$(pwgen -s 32 1)
+    export MAILSRV_SA_RC_PASS_RW_PASSW
+    _inst_data_save "passw" MAILSRV_SA_RC_PASS_RW_PASSW "$MAILSRV_SA_RC_PASS_RW_PASSW"
+    (( generated++ ))
+fi
+
+if [[ -z "$MAILSRV_SA_POSTFIXADM_RW_PASSW" ]]; then
+    print_inf "generating password for 'sa-postfixadm-rw'"
+    MAILSRV_SA_POSTFIXADM_RW_PASSW=$(pwgen -s 32 1)
+    export MAILSRV_SA_POSTFIXADM_RW_PASSW
+    _inst_data_save "passw" MAILSRV_SA_POSTFIXADM_RW_PASSW "$MAILSRV_SA_POSTFIXADM_RW_PASSW"
+    (( generated++ ))
+fi
+
+if [[ $generated -eq 0 ]]; then
+    print_wrn "nothing generated, got all passwords from environment or previous run"
+else
+    print_suc "generated $generated passwords"
+fi
+
+print_inf "generated passwords can be found in '$(_inst_data_getpath "passw")'"
+
+_inst_data_save "passw" MAILSRV_SA_POSTFIX_RO_PASSW "$MAILSRV_SA_POSTFIX_RO_PASSW"
+_inst_data_save "passw" MAILSRV_SA_DOVECOT_RO_PASSW "$MAILSRV_SA_DOVECOT_RO_PASSW"
+_inst_data_save "passw" MAILSRV_SA_ROUNDCUBE_RW_PASSW "$MAILSRV_SA_ROUNDCUBE_RW_PASSW"
+_inst_data_save "passw" MAILSRV_SA_RC_PASS_RW_PASSW "$MAILSRV_SA_RC_PASS_RW_PASSW"
+_inst_data_save "passw" MAILSRV_SA_POSTFIXADM_RW_PASSW "$MAILSRV_SA_POSTFIXADM_RW_PASSW"
