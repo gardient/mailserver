@@ -105,7 +105,9 @@ piped() {
         exit 0
     else
         cd "$INSTALLER_REPO"
+        exec </dev/tty >/dev/tty # bloody hack to get back terminal IO in the pipe
         ./install
+        exit # we actually have to do this otherwhise it just hangs
     fi
 }
 
