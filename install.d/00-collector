@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+source "$INSTALLER_UTILS/print.sh"
+source "$INSTALLER_UTILS/read.sh"
+source "$INSTALLER_UTILS/installer-data.sh"
+
+_inst_data_load "hosting"
+_inst_data_load "passw"
+
+if [[ -z "$MAILSRV_FQDN" ]]; then
+    fqdn_guess="$HOSTNAME"
+    if [[ "$(tr '.' ' ' <<< "$fqdn_guess" | wc -w)" -lt 2 ]]; then
+        fqdn_guess="$fqdn_guess.local"
+    fi
+    prompt_and_read "What is the servers FQDN? (ex.: mail.example.com)" "$fqdn_guess" "MAILSRV_FQDN"
+    export MAILSRV_FQDN
+    _inst_data_save "hosting" MAILSRV_FQDN "$MAILSRV_FQDN"
+fi
+
+if [[ -z "$MAILSRV_MAIL_DOMAIN" ]]; then
+    mail_domain_guess="$MAILSRV_FQDN"
+    if [[ "$(tr '.' ' ' <<< "$mail_domain_guess" | wc -w)" -gt 2 ]]; then
+        mail_domain_guess="$(cut -d. -f2- <<< "$mail_domain_guess")"
+    fi
+    prompt_and_read "What domain will this server serve? (ex.: example.com)" "$mail_domain_guess" "MAILSRV_MAIL_DOMAIN"
+    export MAILSRV_MAIL_DOMAIN
+    _inst_data_save "hosting" MAILSRV_MAIL_DOMAIN "$MAILSRV_MAIL_DOMAIN"
+fi
+
+if [[ -z "$MAILSRV_DB_SA_PASSW" ]]; then
+    prompt_and_pasw "Database \`Superadmin\` password" "MAILSRV_DB_SA_PASSW"
+    export MAILSRV_DB_SA_PASSW
+    _inst_data_save "passw" MAILSRV_DB_SA_PASSW "$MAILSRV_DB_SA_PASSW"
+fi
+
+if [[ -z "$MAILSRV_WEBMSTR_PASSW" ]]; then
+    prompt_and_pasw "Email account password for \`webmaster@$MAILSRV_MAIL_DOMAIN\`" "MAILSRV_WEBMSTR_PASSW"
+    export MAILSRV_WEBMSTR_PASSW
+    _inst_data_save "passw" MAILSRV_WEBMSTR_PASSW "$MAILSRV_WEBMSTR_PASSW"
+fi
+
+if [[ -z "$MAILSRV_POSTFIX_ADM_SETUP_PASSW" ]]; then
+    prompt_and_pasw "PostfixAdmin setup password" "MAILSRV_POSTFIX_ADM_SETUP_PASSW"
+    export MAILSRV_POSTFIX_ADM_SETUP_PASSW
+    _inst_data_save "passw" MAILSRV_POSTFIX_ADM_SETUP_PASSW "$MAILSRV_POSTFIX_ADM_SETUP_PASSW"
+fi
+
+# always re-save everything at the end
+_inst_data_save "hosting" MAILSRV_FQDN "$MAILSRV_FQDN"
+_inst_data_save "hosting" MAILSRV_MAIL_DOMAIN "$MAILSRV_MAIL_DOMAIN"
+_inst_data_save "passw" MAILSRV_DB_SA_PASSW "$MAILSRV_DB_SA_PASSW"
+_inst_data_save "passw" MAILSRV_WEBMSTR_PASSW "$MAILSRV_WEBMSTR_PASSW"
+_inst_data_save "passw" MAILSRV_POSTFIX_ADM_SETUP_PASSW "$MAILSRV_POSTFIX_ADM_SETUP_PASSW"
