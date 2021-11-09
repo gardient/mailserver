@@ -8,10 +8,23 @@ prompt_and_read() {
 
     echo -n "$prmpt"
     if [[ -n "$deflt" ]]; then echo " [$deflt]:"; else echo ':'; fi
-    echo -n '> '
-    read inpt
+    read -p '> ' inpt
     if [[ -z "$inpt" && -n "$deflt" ]]; then
         inpt="$deflt"
+    fi
+
+    eval "$out=\$inpt"
+}
+
+prompt_and_pasw() {
+    local prmpt="$1"
+    local out="$2"
+
+    echo "$prmpt: (leave blank to generate a random one)"
+    read -sp '> ' inpt
+    echo
+    if [[ -z "$inpt" ]]; then
+        inpt=$(pwgen -s 32 1)
     fi
 
     eval "$out=\$inpt"
