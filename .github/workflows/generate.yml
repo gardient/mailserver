@@ -12,7 +12,7 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-  
+
 permissions:
   contents: write
 
@@ -27,7 +27,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      
+
       - name: setup git config
         run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
@@ -36,4 +36,6 @@ jobs:
 
       # Generates variables.md checks if anything changed, commits if so
       - name: run VARIABLES.md generator script
-        run: ./scripts/workflow/generate-variables.sh
+        run: |
+          chmod +x ./scripts/workflow/generate-variables.sh
+          ./scripts/workflow/generate-variables.sh
