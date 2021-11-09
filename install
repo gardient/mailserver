@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+#######################################
+#
+# This script is both a bootstrapper and the install script
+# it can be downloaded with curl and piped into bash to bootstrap the entire thing
+# it will ask for root privileges if that's not given
+# recommendation is to straight up run it as root
+#
+# curl -sSL https://github.com/gardient/mailserver/raw/main/install | bash
+# or
+# sudo bash -c 'curl -sSL https://github.com/gardient/mailserver/raw/main/install | bash'
+#
+#######################################
+
 set -a
 term_rst='\e[0m'
 term_err='\e[0;31m'
@@ -28,7 +41,7 @@ _ensure_defaults() {
     fi
 
     INSTALLER_REPO="$MAILSRV_INSTALL_DIR/repo"
-    INSTALLER_UTILS="$MAILSRV_INSTALL_DIR/repo/utils"
+    INSTALLER_UTILS="$INSTALLER_REPO/utils"
     INSTALLER_TMP="$MAILSRV_INSTALL_DIR/tmp"
     INSTALLER_DATA="$MAILSRV_INSTALL_DIR/installdata"
     set +a

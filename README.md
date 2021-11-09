@@ -5,3 +5,14 @@ Mostly based on [Workaround.org's ISPMail tutorial for Debian Buster](https://wo
 
 ## TODO
 See project tab
+
+## Installation
+run the following as root
+```sh
+curl -sSL https://github.com/gardient/mailserver/raw/main/install | bash
+```
+
+or you can run the next one with a user that can sudo
+```sh
+sudo bash -c 'curl -sSL https://github.com/gardient/mailserver/raw/main/install | bash'
+```
