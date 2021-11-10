@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+source "$INSTALLER_UTILS/print.sh"
+source "$INSTALLER_UTILS/installer-data.sh"
+
+_inst_data_load "hosting"
+
+
+
+debconf-set-selections <<< "postfix postfix/mailname string $MAILSRV_FQDN"
+debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
+
+apt-get install -y postfix postfix-mysql \
+    apache2 \
+    php libapache2-mod-php php-imagick php-curl php-fpm php-gd php-imap php-intl \
+    php-ldap php-mbstring php-mysql php-xml php-zip \
+    rspamd swaks mutt \
+    dovecot-mysql dovecot-pop3d dovecot-imapd dovecot-managesieved dovecot-lmtpd \
+    adminer ca-certificates
