@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+source "$INSTALLER_UTILS/env.sh"
+source "$INSTALLER_UTILS/print.sh"
+source "$INSTALLER_UTILS/installer-data.sh"
+
+_inst_data_load "db"
+_inst_data_load "passw"
+
+__ensure_env MAILSRV_DBNAME_POSTFIX "postfix"
+__ensure_env MAILSRV_DBNAME_RCMAIL "roundcube"
+_inst_data_save "db" MAILSRV_DBNAME_POSTFIX "$MAILSRV_DBNAME_POSTFIX"
+_inst_data_save "db" MAILSRV_DBNAME_RCMAIL "$MAILSRV_DBNAME_RCMAIL"
+
+print_inf "creating databases: ['MAILSRV_DBNAME_POSTFIX':'$MAILSRV_DBNAME_POSTFIX','MAILSRV_DBNAME_RCMAIL':'$MAILSRV_DBNAME_RCMAIL']"
+
+
+mysql <<-EOF
+# create databases
+CREATE DATABASE \`$MAILSRV_DBNAME_POSTFIX\`;
+CREATE DATABASE \`$MAILSRV_DBNAME_RCMAIL\` CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci';
+
+# create users
+CREATE USER 'superadmin'@'127.0.0.1'        IDENTIFIED BY '$MAILSRV_DB_SA_PASSW';
+CREATE USER 'sa-postfix-ro'@'127.0.0.1'     IDENTIFIED BY '$MAILSRV_SA_POSTFIX_RO_PASSW';
+CREATE USER 'sa-dovecot-ro'@'127.0.0.1'     IDENTIFIED BY '$MAILSRV_SA_DOVECOT_RO_PASSW';
+CREATE USER 'sa-rc-pass-rw'@'127.0.0.1'     IDENTIFIED BY '$MAILSRV_SA_RC_PASS_RW_PASSW';
+CREATE USER 'sa-postfixadm-rw'@'127.0.0.1'  IDENTIFIED BY '$MAILSRV_SA_POSTFIXADM_RW_PASSW';
+CREATE USER 'sa-roundcube-rw'@'127.0.0.1'   IDENTIFIED BY '$MAILSRV_SA_ROUNDCUBE_RW_PASSW';
+
+# grant rights to users
+GRANT ALL               ON *.*                              TO 'superadmin'@'127.0.0.1' WITH GRANT OPTION;
+GRANT SELECT            ON \`$MAILSRV_DBNAME_POSTFIX\`.*    TO 'sa-postfix-ro'@'127.0.0.1';
+GRANT SELECT            ON \`$MAILSRV_DBNAME_POSTFIX\`.*    TO 'sa-dovecot-ro'@'127.0.0.1';
+GRANT SELECT, UPDATE    ON \`$MAILSRV_DBNAME_POSTFIX\`.*    TO 'sa-rc-pass-rw'@'127.0.0.1';
+GRANT ALL               ON \`$MAILSRV_DBNAME_POSTFIX\`.*    TO 'sa-postfixadm-rw'@'127.0.0.1';
+GRANT ALL               ON \`$MAILSRV_DBNAME_RCMAIL\`.*     TO 'sa-roundcube-rw'@'127.0.0.1';
+EOF
