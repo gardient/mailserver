@@ -34,8 +34,10 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
 
+      - name: make script executable
+        run: chmod +x ./scripts/workflow/generate-variables.sh
       # Generates variables.md checks if anything changed, commits if so
       - name: run VARIABLES.md generator script
-        run: |
-          chmod +x ./scripts/workflow/generate-variables.sh
-          ./scripts/workflow/generate-variables.sh
+        run: ./scripts/workflow/generate-variables.sh
+        env:
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}

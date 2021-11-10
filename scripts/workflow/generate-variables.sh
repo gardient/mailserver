@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-GH_TOKEN="$1"
 ./scripts/generate-variables-md.sh > "/tmp/VARIABLES.md"
 
 if cmp -s "VARIABLES.md" "/tmp/VARIABLES.md"; then
@@ -12,5 +11,10 @@ else
     git add "VARIABLES.md"
     git commit -m "updating VARIABLES.md"
     echo "pushing..."
-    git push
+
+    if [[ -n "$PR_BRANCH" ]]; then
+        git push origin HEAD:
+    else
+        git push
+    fi
 fi

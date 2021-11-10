@@ -12,7 +12,7 @@ They will be read from the environment
 Don't forget to \`export\` them
 
 \`\`\`sh
-$(fgrep -v -e 'MAILSRV_SA_' -e 'MAILSRV_INSTALL' <<< "$vars")
+$(fgrep -v -e 'MAILSRV_SA_' -e 'MAILSRV_INSTALL_' -e 'MAILSRV_DBNAME_' <<< "$vars")
 \`\`\`
 
 If you want to have a truly headless instalation you will have to define them all
@@ -31,6 +31,14 @@ $(fgrep 'MAILSRV_SA_' <<< "$vars")
 the following overwrites the bootstrappers behaviour
 
 \`\`\`sh
-$(fgrep 'MAILSRV_INSTALL' <<< "$vars")
+$(fgrep 'MAILSRV_INSTALL_' <<< "$vars")
+\`\`\`
+
+# database name overrides
+
+the following overwrites the default database names
+
+\`\`\`sh
+$(fgrep 'MAILSRV_DBNAME_' <<< "$vars")
 \`\`\`
 EOF
