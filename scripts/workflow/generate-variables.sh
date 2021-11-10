@@ -13,7 +13,7 @@ else
     echo "pushing..."
 
     if [[ -n "$PR_BRANCH" ]]; then
-        git push origin HEAD:
+        git push origin HEAD:$PR_BRANCH
     else
         git push
     fi
