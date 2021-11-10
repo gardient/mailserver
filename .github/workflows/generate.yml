@@ -41,3 +41,4 @@ jobs:
         run: ./scripts/workflow/generate-variables.sh
         env:
           PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+        if: github.event.pull_request.head.repo.full_name == github.event.pull_request.base.repo.full_name

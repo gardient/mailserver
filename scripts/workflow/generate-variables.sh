@@ -7,7 +7,9 @@ if cmp -s "VARIABLES.md" "/tmp/VARIABLES.md"; then
 else
     echo "regenerated VARIABLES.md..."
     if [[ -n "$PR_BRANCH" ]]; then
-        git checkout origin/$PR_BRANCH
+        git fetch
+        git checkout "$PR_BRANCH"
+        git pull origin "$PR_BRANCH"
     fi
     echo "commiting..."
     mv "/tmp/VARIABLES.md" "VARIABLES.md"
@@ -16,7 +18,7 @@ else
     echo "pushing..."
 
     if [[ -n "$PR_BRANCH" ]]; then
-        git push origin HEAD:$PR_BRANCH
+        git push origin $PR_BRANCH
     else
         git push
     fi
