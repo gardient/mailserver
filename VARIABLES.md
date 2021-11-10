@@ -7,8 +7,6 @@ They will be read from the environment
 Don't forget to `export` them
 
 ```sh
-$MAILSRV_DBNAME_POSTFIX
-$MAILSRV_DBNAME_RCMAIL
 $MAILSRV_DB_SA_PASSW
 $MAILSRV_FQDN
 $MAILSRV_MAIL_DOMAIN
@@ -40,4 +38,13 @@ $MAILSRV_INSTALL_DIR
 $MAILSRV_INSTALL_GIT_REMOTE
 $MAILSRV_INSTALL_USE_BRANCH
 $MAILSRV_INSTALL_USE_TAG
+```
+
+# database name overrides
+
+the following overwrites the default database names
+
+```sh
+$MAILSRV_DBNAME_POSTFIX
+$MAILSRV_DBNAME_RCMAIL
 ```
