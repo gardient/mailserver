@@ -7,6 +7,8 @@ They will be read from the environment
 Don't forget to `export` them
 
 ```sh
+$MAILSRV_DBNAME_POSTFIX
+$MAILSRV_DBNAME_RCMAIL
 $MAILSRV_DB_SA_PASSW
 $MAILSRV_FQDN
 $MAILSRV_MAIL_DOMAIN
