@@ -3,9 +3,9 @@
 source "$INSTALLER_UTILS/print.sh"
 source "$INSTALLER_UTILS/installer-data.sh"
 
+_inst_step_hasrun "$(basename $0)"
+
 _inst_data_load "hosting"
-
-
 
 debconf-set-selections <<< "postfix postfix/mailname string $MAILSRV_FQDN"
 debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
@@ -18,3 +18,5 @@ apt-get install -y mariadb-server \
     php-ldap php-mbstring php-mysql php-xml php-zip \
     adminer rspamd swaks mutt \
     ca-certificates fail2ban
+
+_inst_step_success "$(basename $0)"

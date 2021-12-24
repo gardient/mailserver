@@ -1,5 +1,6 @@
 BASEDIR="$(dirname "${BASH_SOURCE[0]}")"
 source "$BASEDIR/env.sh"
+source "$BASEDIR/print.sh"
 
 _inst_data_getpath() {
     echo "$INSTALLER_DATA/$1.dat"
@@ -34,4 +35,15 @@ _inst_data_save() {
 
     echo "$key='$val'" >> "$store"
     chmod 600 "$store"
+}
+
+_inst_step_hasrun() {
+    if [[ -f "$INSTALLER_DATA/$1.step" ]]; then
+        print_wrn "$1 has already ran... skipping"
+        exit 0
+    fi
+}
+
+_inst_step_success() {
+    touch "$INSTALLER_DATA/$1.step"
 }

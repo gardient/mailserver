@@ -4,6 +4,8 @@ source "$INSTALLER_UTILS/env.sh"
 source "$INSTALLER_UTILS/print.sh"
 source "$INSTALLER_UTILS/installer-data.sh"
 
+_inst_step_hasrun "$(basename $0)"
+
 _inst_data_load "db"
 _inst_data_load "passw"
 
@@ -63,3 +65,5 @@ GRANT ALL               ON \`$MAILSRV_DBNAME_RCMAIL\`.*     TO '$MAILSRV_DBUSERN
 EOF
 
 print_suc "DONE creating users"
+
+_inst_step_success "$(basename $0)"

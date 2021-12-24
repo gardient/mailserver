@@ -3,6 +3,8 @@
 source "$INSTALLER_UTILS/print.sh"
 source "$INSTALLER_UTILS/installer-data.sh"
 
+_inst_step_hasrun "$(basename $0)"
+
 _inst_data_load "passw"
 
 print_inf "generating DB service account passwords"
@@ -62,3 +64,5 @@ _inst_data_save "passw" MAILSRV_SA_DOVECOT_RO_PASSW "$MAILSRV_SA_DOVECOT_RO_PASS
 _inst_data_save "passw" MAILSRV_SA_ROUNDCUBE_RW_PASSW "$MAILSRV_SA_ROUNDCUBE_RW_PASSW"
 _inst_data_save "passw" MAILSRV_SA_RC_PASS_RW_PASSW "$MAILSRV_SA_RC_PASS_RW_PASSW"
 _inst_data_save "passw" MAILSRV_SA_POSTFIXADM_RW_PASSW "$MAILSRV_SA_POSTFIXADM_RW_PASSW"
+
+_inst_step_success "$(basename $0)"
