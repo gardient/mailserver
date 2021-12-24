@@ -1,0 +1,26 @@
+#!/usr/vin/env bash
+
+source "$INSTALLER_UTILS/env.sh"
+source "$INSTALLER_UTILS/print.sh"
+source "$INSTALLER_UTILS/installer-data.sh"
+
+_inst_step_hasrun "$(basename $0)"
+
+moddir="$INSTALLER_REPO/modules/$(basename $0)"
+
+_inst_data_load "db"
+_inst_data_load "passw"
+
+mkdir -p /etc/postfix/sql
+chown root:postfix /etc/postfix/sql
+chmod 700 /etc/postfix/sql
+
+config_tmp="$INSTALLER_TMP/postfixadmin"
+$moddir/db-conf-generator $config_tmp
+
+cp config_tmp/* /etc/postfix/sql/
+
+chown -R root:postfix /etc/postfix/sql
+chmod 600 /etc/postfix/sql/*
+
+_inst_step_success "$(basename $0)"
