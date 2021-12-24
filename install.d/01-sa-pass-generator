@@ -3,7 +3,7 @@
 source "$INSTALLER_UTILS/print.sh"
 source "$INSTALLER_UTILS/installer-data.sh"
 
-if _inst_step_hasrun "$(basename $0)"; then exit 0; fi
+_inst_step_hasrun "$(basename $0)"
 
 _inst_data_load "passw"
 

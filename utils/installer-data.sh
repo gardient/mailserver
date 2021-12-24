@@ -1,5 +1,6 @@
 BASEDIR="$(dirname "${BASH_SOURCE[0]}")"
 source "$BASEDIR/env.sh"
+source "$BASEDIR/print.sh"
 
 _inst_data_getpath() {
     echo "$INSTALLER_DATA/$1.dat"
@@ -37,7 +38,10 @@ _inst_data_save() {
 }
 
 _inst_step_hasrun() {
-    [[ -f "$INSTALLER_DATA/$1.step" ]]
+    if [[ -f "$INSTALLER_DATA/$1.step" ]]; then
+        print_wrn "$1 has already ran... skipping"
+        exit 0
+    fi
 }
 
 _inst_step_success() {
