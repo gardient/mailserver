@@ -112,7 +112,7 @@ piped() {
 
 _piped_getdata() {
     __print $term_wrn "clearing repo directory"
-    rm -rfv "$INSTALLER_REPO"
+    rm -rf "$INSTALLER_REPO"
     if [[ -n "$MAILSRV_INSTALL_USE_BRANCH" ]]; then
         echo ">> git clone --dept 1 -b \"$MAILSRV_INSTALL_USE_BRANCH\" \"$MAILSRV_INSTALL_GIT_REMOTE\" \"$INSTALLER_REPO\""
         git clone --dept 1 -b "$MAILSRV_INSTALL_USE_BRANCH" "$MAILSRV_INSTALL_GIT_REMOTE" "$INSTALLER_REPO"
