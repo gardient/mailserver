@@ -55,7 +55,6 @@ __ensure_directory_exists() {
 
 _ensure_installer_directories() {
     __ensure_directory_exists $MAILSRV_INSTALL_DIR
-    __ensure_directory_exists $INSTALLER_REPO
     rm -rfv $INSTALLER_TMP > $output
     __ensure_directory_exists $INSTALLER_TMP
     __ensure_directory_exists $INSTALLER_DATA
@@ -113,7 +112,7 @@ piped() {
 
 _piped_getdata() {
     __print $term_wrn "clearing repo directory"
-    rm -rfv "$INSTALLER_REPO/*"
+    rm -rfv "$INSTALLER_REPO"
     if [[ -n "$MAILSRV_INSTALL_USE_BRANCH" ]]; then
         echo ">> git clone --dept 1 -b \"$MAILSRV_INSTALL_USE_BRANCH\" \"$MAILSRV_INSTALL_GIT_REMOTE\" \"$INSTALLER_REPO\""
         git clone --dept 1 -b "$MAILSRV_INSTALL_USE_BRANCH" "$MAILSRV_INSTALL_GIT_REMOTE" "$INSTALLER_REPO"
