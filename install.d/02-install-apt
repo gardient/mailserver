@@ -5,7 +5,7 @@ source "$INSTALLER_UTILS/installer-data.sh"
 
 _inst_data_load "hosting"
 
-if _inst_step_hasrun $0; then exit 0; fi
+if _inst_step_hasrun "$(basename $0)"; then exit 0; fi
 
 debconf-set-selections <<< "postfix postfix/mailname string $MAILSRV_FQDN"
 debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
@@ -19,4 +19,4 @@ apt-get install -y mariadb-server \
     adminer rspamd swaks mutt \
     ca-certificates fail2ban
 
-_inst_step_success $0
+_inst_step_success "$(basename $0)"

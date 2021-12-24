@@ -3,7 +3,7 @@
 source "$INSTALLER_UTILS/print.sh"
 source "$INSTALLER_UTILS/installer-data.sh"
 
-if _inst_step_hasrun $0; then exit 0; fi
+if _inst_step_hasrun "$(basename $0)"; then exit 0; fi
 
 _inst_data_load "passw"
 
@@ -65,4 +65,4 @@ _inst_data_save "passw" MAILSRV_SA_ROUNDCUBE_RW_PASSW "$MAILSRV_SA_ROUNDCUBE_RW_
 _inst_data_save "passw" MAILSRV_SA_RC_PASS_RW_PASSW "$MAILSRV_SA_RC_PASS_RW_PASSW"
 _inst_data_save "passw" MAILSRV_SA_POSTFIXADM_RW_PASSW "$MAILSRV_SA_POSTFIXADM_RW_PASSW"
 
-_inst_step_success $0
+_inst_step_success "$(basename $0)"
