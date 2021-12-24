@@ -12,7 +12,7 @@ They will be read from the environment
 Don't forget to \`export\` them
 
 \`\`\`sh
-$(fgrep -v -e 'MAILSRV_SA_' -e 'MAILSRV_INSTALL_' -e 'MAILSRV_DBNAME_' <<< "$vars")
+$(fgrep -v -e 'MAILSRV_SA_' -e 'MAILSRV_INSTALL_' -e 'MAILSRV_DBNAME_' -e 'MAILSRV_DBUSERNAME_' <<< "$vars")
 \`\`\`
 
 If you want to have a truly headless instalation you will have to define them all
@@ -40,5 +40,11 @@ the following overwrites the default database names
 
 \`\`\`sh
 $(fgrep 'MAILSRV_DBNAME_' <<< "$vars")
+\`\`\`
+
+and the usernames
+
+\`\`\`sh
+$(fgrep 'MAILSRV_DBUSERNAME_' <<< "$vars")
 \`\`\`
 EOF

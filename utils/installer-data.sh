@@ -35,3 +35,11 @@ _inst_data_save() {
     echo "$key='$val'" >> "$store"
     chmod 600 "$store"
 }
+
+_inst_step_hasrun() {
+    [[ -f "$INSTALLER_DATA/$1.step" ]]
+}
+
+_inst_step_success() {
+    touch "$INSTALLER_DATA/$1.step"
+}

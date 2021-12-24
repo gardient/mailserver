@@ -4,6 +4,8 @@ source "$INSTALLER_UTILS/print.sh"
 source "$INSTALLER_UTILS/read.sh"
 source "$INSTALLER_UTILS/installer-data.sh"
 
+if _inst_step_hasrun $0; then exit 0; fi
+
 _inst_data_load "hosting"
 _inst_data_load "passw"
 
@@ -51,3 +53,5 @@ _inst_data_save "hosting" MAILSRV_MAIL_DOMAIN "$MAILSRV_MAIL_DOMAIN"
 _inst_data_save "passw" MAILSRV_DB_SA_PASSW "$MAILSRV_DB_SA_PASSW"
 _inst_data_save "passw" MAILSRV_WEBMSTR_PASSW "$MAILSRV_WEBMSTR_PASSW"
 _inst_data_save "passw" MAILSRV_POSTFIX_ADM_SETUP_PASSW "$MAILSRV_POSTFIX_ADM_SETUP_PASSW"
+
+_inst_step_success $0
