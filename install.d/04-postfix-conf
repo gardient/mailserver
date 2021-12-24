@@ -16,7 +16,7 @@ chown root:postfix /etc/postfix/sql
 chmod 700 /etc/postfix/sql
 
 config_tmp="$INSTALLER_TMP/postfixadmin"
-$moddir/db-conf-generator $config_tmp
+$moddir/db-conf-generator.sh $config_tmp
 
 cp config_tmp/* /etc/postfix/sql/
 
